@@ -1,0 +1,64 @@
+import React from 'react';
+import styles from "./auth.module.scss";
+import Card from '../../components/card/Card';
+import { Link } from 'react-router-dom';
+import { AiOutlineMail } from "react-icons/ai";
+import { useState } from 'react';
+import { toast } from 'react-toastify';
+import { forgotPassword,validateEmail } from '../../services/authService';
+const Forgot = () => {
+  const [email,setEmail] = useState("")
+  const forgot = async (e) => {
+    e.preventDefault()
+    if (!email){
+      return toast.error("Please enter an email")
+    }
+  
+    if (!validateEmail(email)){
+      return toast.error("Please enter a valid email")
+    }
+
+    const userData = {
+      email
+    }
+    await forgotPassword(userData)
+    setEmail("")
+  }
+  
+  return <div className={`container ${styles.auth}`}>
+  <Card>
+    <div className={styles.form}> 
+    <div className="--flex-center">
+      <AiOutlineMail size={35} color="#999"/>
+    </div>
+
+    <h2>Forgot Password?</h2>
+
+<form onSubmit={forgot}>
+<input type ="email" placeholder='Email'required name= "email" value={email} onChange={
+  (e) => setEmail(e.target.value)
+}/>
+<button type='submit' className='--btn --btn-primary --btn-block'> Send Email </button>
+
+</form>
+
+
+<span className={styles.register}>
+<Link to="/">Home</Link>
+<p>
+  &nbsp; Have an account? &nbsp;
+</p>
+<Link to="/login">Login</Link>
+</span>
+
+
+
+    </div>
+
+  </Card>
+  
+  </div>
+
+};
+
+export default Forgot;
